@@ -1,0 +1,22 @@
+%html
+  %head
+    %title User
+    %link{ :href => "/styles/tripoli.simple.css", :type => "text/css", :rel => "stylesheet" }
+    /[if IE]
+      %link{ :href => "/styles/tripoli.simple.ie.css", :type => "text/css", :rel => "stylesheet" }
+  %body
+    .content
+      #header
+        %h1 User example
+      #menu
+        %ul
+          %li
+            = link_to 'List users', '/user/list'
+          %li
+            = link_to 'Create user', '/user/create'
+          %li
+            = link_to 'Login', '/user/login', {:condition => logged_in?, :location => '/user/logout', :name => 'Logout'}
+      %hr
+      = show_flash
+      #container
+        = yield

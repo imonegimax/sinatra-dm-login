@@ -4,37 +4,53 @@ require 'config/database'
 
 enable :sessions
 
-def logged_in?
-  return true if session[:user]
-  nil
-end
-
 get '/' do
-  if logged_in?
-   "You are logged in! - <a href=\"/user/logout\">Logout</a>"
-  else
-    "You are not logged in! - <a href=\"/user/login\">Login</a>"
-  end  
+  haml :index
 end
 
 get '/user/login' do
-     erb :login
+  haml :login
 end
 
 post '/user/login' do
   if session[:user] = User.authenticate(params["login"], params["password"])
+    flash("Login successful")
     redirect '/'
   else
-    redirect '/fail'
+    flash("Login failed - Try again")
+    redirect '/user/login'
   end
 end
 
 get '/user/logout' do
   session[:user] = nil
+  flash("Logout successful")
   redirect '/'
 end
 
-get '/fail' do
-  "Login failed - <a href=\"/user/login\">Try again</a>"
+get '/user/create' do
+  haml :create
 end
 
+post '/user/create' do
+  u = User.new
+  u.login = params["login"]
+  u.password = params["password"]
+  u.email = params["email"]
+  if u.save
+    flash("User created")
+    redirect '/user/list'
+  else
+    tmp = []
+    u.errors.each do |e|
+      tmp << (e.join("<br/>"))
+    end
+    flash(tmp)
+    redirect '/user/create'
+  end
+end
+
+get '/user/list' do
+  @u = User.all
+  haml :list
+end

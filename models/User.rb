@@ -1,19 +1,23 @@
 require 'helpers/general'
 require 'digest/sha1'
+require 'dm-validations'
+require 'date'
 
 class User
   include DataMapper::Resource
   
-  property :id,			Integer, :serial => true
-  property :login,		String,  :key => true
+  property :id,			Integer, 	:serial => true
+  property :login,		String,  	:key => true, :length => (3..40), :nullable => false
   property :hashed_password, 	String
-  property :email,		String
+  property :email,		String,		:format => :email_address
   property :salt,		String
-  property :created_at,		DateTime
+  property :created_at,		DateTime,	:default => DateTime.now
   
+  validates_present :login, :email
+
   def password=(pass)
     @password = pass
-    self.salt = GeneralHelpers.random_string(10) unless self.salt
+    self.salt = random_string(10) unless self.salt
     self.hashed_password = User.encrypt(@password, self.salt)
   end
 
