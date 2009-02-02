@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'sinatra'
 require 'dm-core'
 
 namespace :db do
