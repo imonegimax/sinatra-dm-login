@@ -17,4 +17,6 @@ Following gems are needed(might be incomplete):
   do_sqlite3
   rake
   rack
-  mongrel or thin 
+  mongrel or thin
+
+Testing 
