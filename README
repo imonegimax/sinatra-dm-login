@@ -10,6 +10,7 @@ Test users:
   name: test | password: pw
   name: foo  | password: bar 
 
+
 Following gems are needed(might be incomplete):
   sinatra
   datamapper
